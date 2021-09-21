@@ -1,8 +1,8 @@
-package com.example.android_2021_task_5
+package com.example.android2021task5
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.android_2021_task_5.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import com.example.android2021task5.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,8 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
-                    .commitNow()
+                .replace(R.id.container, MainFragment.newInstance())
+                .commitNow()
         }
     }
 }
