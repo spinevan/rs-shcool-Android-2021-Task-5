@@ -8,6 +8,15 @@
     tools:context=".ui.main.MainFragment">
 
 
+    <Button
+        android:id="@+id/addMoreBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Еще"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="0dp"
@@ -29,7 +38,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/serviceRequestRecycler"
+        android:id="@+id/catImagesRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         tools:listitem="@layout/cat_item_view"
@@ -37,6 +46,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
