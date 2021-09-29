@@ -34,6 +34,8 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+
 }
 
 configurations {
@@ -51,6 +53,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -63,6 +66,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    //implementation "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
     //
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -83,6 +87,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
 }
+
+apply plugin: "androidx.navigation.safeargs"
 
 def detektTask = tasks.register("detekt", JavaExec) {
     main = "io.gitlab.arturbosch.detekt.cli.Main"

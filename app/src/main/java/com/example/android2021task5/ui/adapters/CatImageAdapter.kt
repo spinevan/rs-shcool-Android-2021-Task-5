@@ -6,8 +6,8 @@ import com.example.android2021task5.data.models.CatImage
 import com.example.android2021task5.ui.viewHolders.CatImageViewHolder
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.example.android2021task5.databinding.CatItemViewBinding
+import com.example.android2021task5.interfaces.ICatImageListener
 
 class CatImageAdapter(private val listener: ICatImageListener):
     ListAdapter<CatImage, CatImageViewHolder>(itemComparator) {

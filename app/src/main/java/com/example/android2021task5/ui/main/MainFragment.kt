@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android2021task5.R
 import com.example.android2021task5.databinding.MainFragmentBinding
 import com.example.android2021task5.ui.adapters.CatImageAdapter
-import com.example.android2021task5.ui.adapters.ICatImageListener
+import com.example.android2021task5.interfaces.ICatImageListener
 
 class MainFragment : Fragment(), ICatImageListener {
 
@@ -70,5 +72,9 @@ class MainFragment : Fragment(), ICatImageListener {
 
     override fun loadNextPage() {
         viewModel?.loadNextPageCatImages()
+    }
+
+    override fun openImageFragment(imgUrl: String) {
+        view?.findNavController()?.navigate(R.id.action_mainFragment_to_catImageFragment, bundleOf("imgUrl" to imgUrl))
     }
 }

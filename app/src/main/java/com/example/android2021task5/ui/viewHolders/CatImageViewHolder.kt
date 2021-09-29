@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide
 import com.example.android2021task5.R
 import com.example.android2021task5.data.models.CatImage
 import com.example.android2021task5.databinding.CatItemViewBinding
-import com.example.android2021task5.ui.adapters.ICatImageListener
+import com.example.android2021task5.interfaces.ICatImageListener
 
 class CatImageViewHolder(
     private val binding: CatItemViewBinding,
@@ -24,7 +24,8 @@ class CatImageViewHolder(
             .into(binding.catImage)
 
         binding.catImage.setOnClickListener {
-            println("Click on IMAGE ${catImage.url}")
+            //println("Click on IMAGE ${catImage.url}")
+            listener.openImageFragment(catImage.url!!)
         }
 
     }
