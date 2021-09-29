@@ -2,6 +2,8 @@ package com.example.android2021task5.ui.viewHolders
 
 import android.content.res.Resources
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.android2021task5.R
 import com.example.android2021task5.data.models.CatImage
 import com.example.android2021task5.databinding.CatItemViewBinding
 import com.example.android2021task5.ui.adapters.ICatImageListener
@@ -13,7 +15,18 @@ class CatImageViewHolder(
 ): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(catImage: CatImage) {
-        binding.textId.text = catImage.id
+        //binding.textId.text = catImage.id
+
+        Glide.with(binding.root)
+            .load(catImage.url)
+            .centerCrop()
+            .placeholder(R.drawable.ic_progress)
+            .into(binding.catImage)
+
+        binding.catImage.setOnClickListener {
+            println("Click on IMAGE ${catImage.url}")
+        }
+
     }
 
 }

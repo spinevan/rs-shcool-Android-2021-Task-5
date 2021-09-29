@@ -20,6 +20,10 @@ class CatImageAdapter(private val listener: ICatImageListener):
     override fun onBindViewHolder(holder: CatImageViewHolder, position: Int) {
         val current: CatImage = getItem(position)
         holder.bind(current)
+
+        if ((position >= itemCount - 1))
+            listener.loadNextPage()
+
     }
 
     private companion object {

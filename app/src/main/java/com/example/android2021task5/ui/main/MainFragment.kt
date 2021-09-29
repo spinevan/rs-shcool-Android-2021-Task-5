@@ -47,21 +47,28 @@ class MainFragment : Fragment(), ICatImageListener {
             adapter = catImageAdapter
         }
 
-        binding.addMoreBtn.setOnClickListener{
-            viewModel?.loadNextPageCatImages()
-        }
 
         viewModel?.catImages?.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
-            //itemAdapter.addItems(it)
-            //println(it)
             catImageAdapter.submitList(it)
         })
+
+        viewModel?.isLoadingCats?.observe( viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            binding.swiperefresh.isRefreshing = it
+        } )
+
+        binding.swiperefresh.isEnabled = false
+
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun loadNextPage() {
+        viewModel?.loadNextPageCatImages()
     }
 }
