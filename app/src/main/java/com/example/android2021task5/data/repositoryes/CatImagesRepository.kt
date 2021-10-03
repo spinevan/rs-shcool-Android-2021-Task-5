@@ -8,5 +8,4 @@ class CatImagesRepository {
     suspend fun getCatImages(page: Int): List<CatImage> {
         return CatAPIRetrofitClient.getCatImages(page)
     }
-
 }

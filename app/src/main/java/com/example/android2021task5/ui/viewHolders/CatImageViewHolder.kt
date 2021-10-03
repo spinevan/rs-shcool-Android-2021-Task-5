@@ -12,11 +12,9 @@ class CatImageViewHolder(
     private val binding: CatItemViewBinding,
     private val listener: ICatImageListener,
     private val resources: Resources
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(catImage: CatImage) {
-        //binding.textId.text = catImage.id
-
         Glide.with(binding.root)
             .load(catImage.url)
             .centerCrop()
@@ -24,10 +22,7 @@ class CatImageViewHolder(
             .into(binding.catImage)
 
         binding.catImage.setOnClickListener {
-            //println("Click on IMAGE ${catImage.url}")
             listener.openImageFragment(catImage.url!!)
         }
-
     }
-
 }

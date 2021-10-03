@@ -4,5 +4,4 @@ interface ICatImageListener {
 
     fun loadNextPage()
     fun openImageFragment(imgUrl: String)
-
 }

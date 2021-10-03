@@ -24,8 +24,6 @@ object CatAPIRetrofitClient {
                         result.url
                     )
                 }
-
         }
     }
-
 }

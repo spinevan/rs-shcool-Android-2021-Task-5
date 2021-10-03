@@ -48,5 +48,4 @@ class MainViewModel : ViewModel() {
             isLoadingCats.value = false
         }
     }
-
 }

@@ -12,8 +12,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android2021task5.R
 import com.example.android2021task5.databinding.MainFragmentBinding
-import com.example.android2021task5.ui.adapters.CatImageAdapter
 import com.example.android2021task5.interfaces.ICatImageListener
+import com.example.android2021task5.ui.adapters.CatImageAdapter
 
 class MainFragment : Fragment(), ICatImageListener {
 
@@ -31,38 +31,37 @@ class MainFragment : Fragment(), ICatImageListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        return inflater.inflate(R.layout.main_fragment, container, false)
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
 
         binding.catImagesRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = catImageAdapter
         }
 
+        viewModel?.catImages?.observe(
+            viewLifecycleOwner,
+            Observer {
+                it ?: return@Observer
+                catImageAdapter.submitList(it)
+            }
+        )
 
-        viewModel?.catImages?.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            catImageAdapter.submitList(it)
-        })
-
-        viewModel?.isLoadingCats?.observe( viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            binding.swiperefresh.isRefreshing = it
-        } )
+        viewModel?.isLoadingCats?.observe(
+            viewLifecycleOwner,
+            Observer {
+                it ?: return@Observer
+                binding.swiperefresh.isRefreshing = it
+            }
+        )
 
         binding.swiperefresh.isEnabled = false
-
-
     }
 
     override fun onDestroyView() {
