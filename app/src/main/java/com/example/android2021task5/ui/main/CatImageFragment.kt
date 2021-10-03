@@ -13,14 +13,20 @@ import com.example.android2021task5.databinding.FragmentCatImageBinding
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.BitmapDrawable
+import com.bumptech.glide.request.target.CustomTarget
+import org.jetbrains.annotations.Nullable
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.net.URL
 
 class CatImageFragment : Fragment() {
 
@@ -34,12 +40,15 @@ class CatImageFragment : Fragment() {
         arguments?.let {
             imgUrl = it.getString("imgUrl")
         }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //return inflater.inflate(R.layout.fragment_cat_image, container, false)
         _binding = FragmentCatImageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -114,6 +123,10 @@ class CatImageFragment : Fragment() {
                 e.printStackTrace()
             }
 
+            // Add the image to the system gallery
+            //galleryAddPic(savedImagePath)
+            //Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show() // to make this working, need to manage coroutine, as this execution is something off the main thread
+            println("IMAGE SAVED")
         }
         return savedImagePath
     }
