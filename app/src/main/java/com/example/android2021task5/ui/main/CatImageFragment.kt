@@ -2,37 +2,29 @@ package com.example.android2021task5.ui.main
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.example.android2021task5.IMG_URL_KEY
 import com.example.android2021task5.databinding.FragmentCatImageBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.lang.Exception
 
 class CatImageFragment : Fragment() {
 
     private var _binding: FragmentCatImageBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: CatImageViewModel by activityViewModels()
 
     private var imgUrl: String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            imgUrl = it.getString("imgUrl")
+            imgUrl = it.getString(IMG_URL_KEY)
         }
     }
 
@@ -41,7 +33,6 @@ class CatImageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // return inflater.inflate(R.layout.fragment_cat_image, container, false)
         _binding = FragmentCatImageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,38 +48,7 @@ class CatImageFragment : Fragment() {
             if (!verifyPermissions()) {
                 return@setOnClickListener
             }
-
-            println(imgUrl)
-
-            val filename =
-                imgUrl?.lastIndexOf('/')?.plus(1)?.let { it1 ->
-                    imgUrl?.length?.let { it2 ->
-                        imgUrl?.substring(
-                            it1,
-                            it2
-                        )
-                    }
-                }
-
-            CoroutineScope(Dispatchers.IO).launch {
-                if (filename != null) {
-                    val savedFile = saveImage(
-                        Glide.with(binding.root)
-                            .asBitmap()
-                            .load(imgUrl)
-                            .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                            .error(android.R.drawable.stat_notify_error)
-                            .submit()
-                            .get(),
-                        filename
-                    )
-                    if (savedFile?.length!! > 0) {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(context, "IMAGE SAVED", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }
+            imgUrl?.let { it1 -> viewModel.saveImageToFile(it1, requireContext()) }
         }
     }
 
@@ -97,49 +57,15 @@ class CatImageFragment : Fragment() {
         _binding = null
     }
 
-    private fun saveImage(image: Bitmap, imageFileName: String): String? {
-        var savedImagePath: String? = null
-        val storageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .toString() + "/" + getString(com.example.android2021task5.R.string.app_name)
-        )
-        var success = true
-        if (!storageDir.exists()) {
-            success = storageDir.mkdirs()
-        }
-        if (success) {
-            val imageFile = File(storageDir, imageFileName)
-            savedImagePath = imageFile.getAbsolutePath()
-            try {
-                val fOut: OutputStream = FileOutputStream(imageFile)
-                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
-                fOut.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-        return savedImagePath
-    }
-
     private fun verifyPermissions(): Boolean {
 
-        // This will return the current Status
         val permissionExternalMemory =
             context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.WRITE_EXTERNAL_STORAGE) }
         if (permissionExternalMemory != PackageManager.PERMISSION_GRANTED) {
-            val storagePermissions = arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            // If permission not granted then ask for permission real time.
+            val storagePermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
             ActivityCompat.requestPermissions(requireActivity(), storagePermissions, 1)
             return false
         }
         return true
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            CatImageFragment().apply {
-                arguments = Bundle().apply {}
-            }
     }
 }
