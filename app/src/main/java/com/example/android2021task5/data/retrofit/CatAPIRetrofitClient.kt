@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-object CatAPIRetrofitClient {
+class CatAPIRetrofitClient {
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create())
         .baseUrl(CAT_API_BASE_URL)
@@ -15,8 +15,8 @@ object CatAPIRetrofitClient {
 
     private val catImagesService = retrofit.create(ICatAPI::class.java)
 
-    suspend fun getCatImages(page: Int): List<CatImage> {
-        return withContext(Dispatchers.IO) {
+    suspend fun getCatImages(page: Int): List<CatImage> =
+        withContext(Dispatchers.IO) {
             catImagesService.getListCatImages(page)
                 .map { result ->
                     CatImage(
@@ -25,5 +25,4 @@ object CatAPIRetrofitClient {
                     )
                 }
         }
-    }
 }

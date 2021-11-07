@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.example.android2021task5.R
 import kotlinx.coroutines.CoroutineScope
@@ -22,26 +23,25 @@ class CatImageViewModel : ViewModel() {
 
         val filename = getFileNameFromUrl(imgUrl)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val savedFile = saveImage(
-                Glide.with(context)
-                    .asBitmap()
-                    .load(imgUrl)
-                    .placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                    .error(android.R.drawable.stat_notify_error)
-                    .submit()
-                    .get(),
-                filename,
-                context
-            )
+        viewModelScope.launch {
+            val savedFile =  withContext(Dispatchers.IO) {
+                return@withContext saveImage(
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(imgUrl)
+                        .placeholder(android.R.drawable.progress_indeterminate_horizontal)
+                        .error(android.R.drawable.stat_notify_error)
+                        .submit()
+                        .get(),
+                    filename,
+                    context
+                )
+            }
+
             if (savedFile?.length!! > 0) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, context.getString(R.string.image_saved), Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(context, context.getString(R.string.image_saved), Toast.LENGTH_LONG).show()
             } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, context.getString(R.string.save_error), Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(context, context.getString(R.string.save_error), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -58,7 +58,6 @@ class CatImageViewModel : ViewModel() {
     }
 
     private fun saveImage(image: Bitmap, imageFileName: String, context: Context): String? {
-        var savedImagePath: String? = null
         val storageDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 .toString() + "/" + context.getString(R.string.app_name)
@@ -67,6 +66,8 @@ class CatImageViewModel : ViewModel() {
         if (!storageDir.exists()) {
             success = storageDir.mkdirs()
         }
+
+        var savedImagePath: String? = null
         if (success) {
             val imageFile = File(storageDir, imageFileName)
             savedImagePath = imageFile.absolutePath

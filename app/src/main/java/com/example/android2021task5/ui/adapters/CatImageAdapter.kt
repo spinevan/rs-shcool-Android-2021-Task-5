@@ -21,8 +21,9 @@ class CatImageAdapter(private val listener: ICatImageListener) :
         val current: CatImage = getItem(position)
         holder.bind(current)
 
-        if ((position >= itemCount - 1))
+        if ((position >= itemCount - 1)) {
             listener.loadNextPage()
+        }
     }
 
     private companion object {

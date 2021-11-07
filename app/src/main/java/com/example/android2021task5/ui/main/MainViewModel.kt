@@ -49,8 +49,9 @@ class MainViewModel : ViewModel() {
 
         catsPage++
 
-        if (catsPage > CAT_API_MAX_COUNT_AGES)
+        if (catsPage > CAT_API_MAX_COUNT_AGES) {
             return
+        }
 
         viewModelScope.launch {
             val hasInternet = withContext(Dispatchers.IO) {
@@ -63,7 +64,7 @@ class MainViewModel : ViewModel() {
                 val listCats = catImagesRepository.getCatImages(catsPage)
 
                 val resList: MutableList<CatImage> = mutableListOf()
-                resList.addAll(_catImages.value!!)
+                _catImages.value?.let { resList.addAll(it) }
                 resList.addAll(listCats)
                 _catImages.value = resList
                 isLoadingCats.value = false

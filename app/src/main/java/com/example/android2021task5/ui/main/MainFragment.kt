@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +21,7 @@ class MainFragment : Fragment(), ICatImageListener {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by viewModels()
     private val catImageAdapter = CatImageAdapter(this)
 
     override fun onCreateView(
@@ -42,16 +42,25 @@ class MainFragment : Fragment(), ICatImageListener {
                 adapter = catImageAdapter
             }
             swiperefresh.isEnabled = false
-
-            refreshButton.setOnClickListener {
-                if (viewModel.catsPage > 0) {
-                    viewModel.loadNextPageCatImages()
-                } else {
-                    viewModel.initCatImages()
-                }
-            }
         }
+        initViewModelListeners()
+        initViewDataObservers()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun loadNextPage() {
+        viewModel.loadNextPageCatImages()
+    }
+
+    override fun openImageFragment(imgUrl: String) {
+        view?.findNavController()?.navigate(R.id.action_mainFragment_to_catImageFragment, bundleOf(IMG_URL_KEY to imgUrl))
+    }
+
+    private fun initViewDataObservers() {
         with(viewModel) {
             catImages.observe(
                 viewLifecycleOwner,
@@ -80,16 +89,13 @@ class MainFragment : Fragment(), ICatImageListener {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun loadNextPage() {
-        viewModel.loadNextPageCatImages()
-    }
-
-    override fun openImageFragment(imgUrl: String) {
-        view?.findNavController()?.navigate(R.id.action_mainFragment_to_catImageFragment, bundleOf(IMG_URL_KEY to imgUrl))
+    private fun initViewModelListeners() {
+        binding.refreshButton.setOnClickListener {
+            if (viewModel.catsPage > 0) {
+                viewModel.loadNextPageCatImages()
+            } else {
+                viewModel.initCatImages()
+            }
+        }
     }
 }

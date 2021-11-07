@@ -5,7 +5,9 @@ import com.example.android2021task5.data.retrofit.CatAPIRetrofitClient
 
 class CatImagesRepository {
 
+    private val catAPIRetrofitClient = CatAPIRetrofitClient()
+
     suspend fun getCatImages(page: Int): List<CatImage> {
-        return CatAPIRetrofitClient.getCatImages(page)
+        return catAPIRetrofitClient.getCatImages(page)
     }
 }
